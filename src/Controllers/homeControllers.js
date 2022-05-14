@@ -121,6 +121,17 @@ let seach = async (req, res) => {
         })
     }
 }
+let getNewRelease = async (req, res) => {
+    try {
+            let response = await Zingmp3.getNewReleaseChart()
+            return res.status(200).json(response)
+    } catch (error) {
+        return res.status(200).json({
+            errCode: -1,
+            message: "error from controller" + error
+        })
+    }
+}
 
 module.exports = {
     getSongById,
@@ -130,5 +141,6 @@ module.exports = {
     getDetailPlaylist,
     getChartHome,
     getArtist,
-    seach
+    seach,
+    getNewRelease
 }

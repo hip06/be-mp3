@@ -120,10 +120,24 @@ let handAddSingerService = (body) => {
 let handleGetPersonalService = (query) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let response = await db.Singer.findAll({
-                where: {idUser: query.idUser},
-                raw: true,
-            })
+            let response = null
+            switch (query.type) {
+                case 'singer':
+                    response = await db.Singer.findAll({
+                        where: {idUser: query.idUser},
+                        raw: true,
+                    })
+                    break;
+                    case 'album':
+                    response = await db.Album.findAll({
+                        where: {idUser: query.idUser},
+                        raw: true,
+                    })
+                    break;
+            
+                default:
+                    break;
+            }
             if (_.isEmpty(response)){
                 resolve({err: 4, msg: 'Tài khoản không tồn tại !'})
             }else{
@@ -134,5 +148,29 @@ let handleGetPersonalService = (query) => {
         }
     })
 }
+let handleAddAlbumService = (body) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!body.idUser || !body.idAlbum){
+                resolve({err: 4, msg: 'Lỗi client: không thấy id user và id song !'})
+            }else{
+                let user = await db.Album.findOrCreate({
+                    where: {idUser: body.idUser, idAlbum: body.idAlbum},
+                    defaults: {
+                        idUser: body.idUser,
+                        idAlbum: body.idAlbum,
+                        avatar: body.avatar
+                    },
+                    raw: true
+                })
+                resolve({err: 0, msg: 'OK', songs: user[0]})    
+            }
+                  
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
 
-module.exports = { handleSignUpService, handleLoginService, handleGetUserService, handleUpdateUserService, handAddSingerService, handleGetPersonalService }
+module.exports = { handleSignUpService, handleLoginService, handleGetUserService, handleUpdateUserService, handAddSingerService, handleGetPersonalService,
+    handleAddAlbumService }

@@ -17,6 +17,7 @@ let initWebRoutes = app => {
     router.get("/api/get-chart-home", homeController.getChartHome)
     router.get("/api/get-artist", homeController.getArtist)
     router.get("/api/search", homeController.seach)
+    router.get("/api/get-new-release", homeController.getNewRelease)
 
     // api user
     router.post('/api/sign-up', userController.handleSignUp)
@@ -25,6 +26,7 @@ let initWebRoutes = app => {
     router.put('/api/update-user', userController.handleUpdateUser)
     router.post('/api/add-favorite-singer', userController.handAddSinger)
     router.get('/api/get-personal', userController.handleGetPersonal)
+    router.post('/api/add-favorite-album', userController.handleAddAlbum)
     
     return app.use("/", router)
 }

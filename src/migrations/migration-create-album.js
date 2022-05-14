@@ -11,7 +11,10 @@ module.exports = {
       idUser: {
         type: Sequelize.INTEGER
       },
-      idAlnum: {
+      idAlbum: {
+        type: Sequelize.STRING
+      },
+      avatar: {
         type: Sequelize.STRING
       },
       createdAt: {
