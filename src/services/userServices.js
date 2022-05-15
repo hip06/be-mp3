@@ -171,6 +171,53 @@ let handleAddAlbumService = (body) => {
         }
     })
 }
+let handleAddRecentService = (body) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!body.idUser){
+                resolve({err: 4, msg: 'Lỗi client: không thấy id user !'})
+            }else{
+                let user = await db.Recent.findOrCreate({
+                    where: {idUser: body.idUser, idSong: body.idSong, idAlbum: body.idAlbum},
+                    defaults: {
+                        idUser: body.idUser,
+                        idAlbum: body.idAlbum || null,
+                        avatarAlbum: body.avatarAlbum || null,
+                        avatarSong: body.avatarSong,
+                        titleSong: body.titleSong,
+                        artistSong: body.artistSong,
+                        dayRelease: body.dayRelease,
+                        duartion: body.duartion,
+                        idSong: body.idSong
+                    },
+                    raw: true
+                })
+                resolve({err: 0, msg: 'OK', songs: user[0]})    
+            }
+                  
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+let handleGetRecentService = (query) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!query.idUser){
+                resolve({err: 4, msg: 'Lỗi client: không thấy id user'})
+            }else{
+                let songs = await db.Recent.findAll({
+                    where: {idUser: query.idUser},
+                    raw: true
+                })
+                resolve({err: 0, msg: 'OK', songs: songs})    
+            }
+                  
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
 
 module.exports = { handleSignUpService, handleLoginService, handleGetUserService, handleUpdateUserService, handAddSingerService, handleGetPersonalService,
-    handleAddAlbumService }
+    handleAddAlbumService, handleAddRecentService, handleGetRecentService }

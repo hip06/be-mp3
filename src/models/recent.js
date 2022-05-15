@@ -14,8 +14,13 @@ module.exports = (sequelize, DataTypes) => {
   Recent.init({
     idUser: DataTypes.INTEGER,
     idAlbum: DataTypes.STRING,
-    idSong: DataTypes.STRING
-    
+    avatarAlbum: DataTypes.STRING,
+    idSong: DataTypes.STRING,
+    avatarSong: DataTypes.STRING,
+    titleSong: DataTypes.STRING,
+    artistSong: DataTypes.STRING,
+    dayRelease: DataTypes.STRING,
+    duartion: DataTypes.INTEGER, 
   }, {
     sequelize,
     modelName: 'Recent',

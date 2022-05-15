@@ -27,6 +27,9 @@ let initWebRoutes = app => {
     router.post('/api/add-favorite-singer', userController.handAddSinger)
     router.get('/api/get-personal', userController.handleGetPersonal)
     router.post('/api/add-favorite-album', userController.handleAddAlbum)
+    router.post('/api/add-recent', userController.handleAddRecent)
+    router.post('/api/add-recent', userController.handleAddRecent)
+    router.get('/api/get-recent', userController.handleGetRecent)
     
     return app.use("/", router)
 }

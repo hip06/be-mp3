@@ -127,5 +127,41 @@ let handleAddAlbum = async (req, res) => {
         })
     }
 }
+let handleAddRecent = async (req, res) => {
+    try {
+        if (_.isEmpty(req.body)) {
+            return res.status(200).json({
+                err: 1,
+                msg: "error from controller" + " missing payload"
+            })
+        } else {
+            let response = await userServices.handleAddRecentService(req.body)
+            return res.status(200).json(response)
+        }
+    } catch (error) {
+        return res.status(200).json({
+            err: -1,
+            msg: "error from controller" + error
+        })
+    }
+}
+let handleGetRecent = async ( req, res ) => {
+    try {
+        if (_.isEmpty(req.query) || !req.query.idUser) {
+            return res.status(200).json({
+                err: 1,
+                msg: "error from controller" + " missing payload"
+            })
+        } else {
+            let response = await userServices.handleGetRecentService(req.query)
+            return res.status(200).json(response)
+        }
+    } catch (error) {
+        return res.status(200).json({
+            err: -1,
+            msg: "error from controller" + error
+        })
+    }
+}
 
-module.exports ={ handleSignUp, handleLogin, handleGetUser, handleUpdateUser, handAddSinger, handleGetPersonal, handleAddAlbum }
+module.exports ={ handleSignUp, handleLogin, handleGetUser, handleUpdateUser, handAddSinger, handleGetPersonal, handleAddAlbum, handleAddRecent, handleGetRecent }
