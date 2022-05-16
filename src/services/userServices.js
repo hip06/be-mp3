@@ -218,6 +218,59 @@ let handleGetRecentService = (query) => {
         }
     })
 }
+let handleDeleteRecentService = (query) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!query.idUser){
+                resolve({err: 4, msg: 'Lỗi client: không thấy id user'})
+            }else{
+                let recent = await db.Recent.findAll({
+                    where: {idUser: query.idUser},
+                    raw: true
+                })
+                if (recent && recent.length > 0){
+                   let ids = recent.map(item => item.id)
+                   if (ids.length > 20) ids.length = 10
+                   await db.Recent.destroy({
+                       where: { idUser: query.idUser, id: ids }
+                   })
+                }
+                resolve({err: 0, msg: 'OK'})  
+            }
+                  
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+let handleDeleteLikeService = (query) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!query.idUser){
+                resolve({err: 4, msg: 'Lỗi client: không thấy id user'})
+            }else{
+               if(query.type === 'singer'){
+                  
+                await db.Singer.destroy({
+                    where: {idUser: query.idUser, idSinger: query.idSinger},
+                    raw: true
+                })
+               }
+               if (query.type === 'album'){
+                await db.Album.destroy({
+                    where: {idUser: query.idUser, idAlbum: query.idAlbum},
+                    raw: true
+                })
+               }
+                
+                resolve({err: 0, msg: 'OK', })  
+            }
+                  
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
 
 module.exports = { handleSignUpService, handleLoginService, handleGetUserService, handleUpdateUserService, handAddSingerService, handleGetPersonalService,
-    handleAddAlbumService, handleAddRecentService, handleGetRecentService }
+    handleAddAlbumService, handleAddRecentService, handleGetRecentService, handleDeleteRecentService, handleDeleteLikeService }

@@ -30,6 +30,9 @@ let initWebRoutes = app => {
     router.post('/api/add-recent', userController.handleAddRecent)
     router.post('/api/add-recent', userController.handleAddRecent)
     router.get('/api/get-recent', userController.handleGetRecent)
+    router.delete('/api/delete-recent', userController.handleDeleteRecent)
+    router.delete('/api/delete-like', userController.handleDeleteLike)
+
     
     return app.use("/", router)
 }
