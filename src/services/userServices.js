@@ -271,6 +271,104 @@ let handleDeleteLikeService = (query) => {
         }
     })
 }
+let handleCreatePlaylistService = (body) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!body.idUser){
+                resolve({err: 4, msg: 'Lỗi client: không thấy id user'})
+            }else{
+               let playlist = await db.Playlist.findOrCreate({
+                   where: { idUser: body.idUser, idPlaylist: body.idPlaylist,},
+                   defaults: {
+                       idUser: body.idUser,
+                       idPlaylist: body.idPlaylist,
+                       namePlaylist: body.namePlaylist || 'no name'
+                   },
+                   raw: true
+               })
+                
+                resolve({err: 0, msg: 'OK', playlist })  
+            }
+                  
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+let handleGetPlaylistService = (query) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!query.idUser){
+                resolve({err: 4, msg: 'Lỗi client: không thấy id user'})
+            }else{
+               let playlist = await db.Playlist.findAll({
+                   where: { idUser: query.idUser, idSong: null},
+                   raw: true
+               })
+                playlist ? resolve({err: 0, msg: 'OK', playlist }) : resolve({err: 3, msg: 'Not Found' })
+            }
+                  
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+let handleGetPlaylistByIdService = (query) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!query.idUser){
+                resolve({err: 4, msg: 'Lỗi client: không thấy id user'})
+            }else{
+               let playlist = await db.Playlist.findAll({
+                   where: { idUser: query.idUser, idPlaylist: query.idPlaylist},
+                   raw: true
+               })
+                playlist ? resolve({err: 0, msg: 'OK', playlist }) : resolve({err: 3, msg: 'Not Found' })
+            }
+                  
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+let handleUpdatePlaylistByIdService = async (body) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!body.idUser){
+                resolve({err: 4, msg: 'Lỗi client: không thấy id user'})
+            }else{
+              if (body.type === 'name'){
+                await db.Playlist.update({
+                    namePlaylist: body.name || 'Chưa đặt tên'
+                },{
+                    where: { idUser: body.idUser, idPlaylist: body.idPlaylist},
+                })
+                 resolve({err: 0, msg: 'OK' }) 
+              }
+              if (body.type === 'song'){
+                let result =  await db.Playlist.findOrCreate({
+                    where: { idUser: body.idUser, idPlaylist: body.idPlaylist, idSong: body.idSong},
+                    defaults: { 
+                            idSong: body.idSong,
+                            thumbnail: body.thumbnail,
+                            title: body.title,
+                            artist: body.artist,
+                            releasedDate: body.releasedDate,
+                            duration: body.duration,
+                            idUser: body.idUser, 
+                            idPlaylist: body.idPlaylist, 
+                        }
+                    })
+                result ? resolve({err: 0, msg: 'OK', result }) :resolve({err: 5, msg: 'Not found' }) 
+              }
+            }
+                  
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
 
 module.exports = { handleSignUpService, handleLoginService, handleGetUserService, handleUpdateUserService, handAddSingerService, handleGetPersonalService,
-    handleAddAlbumService, handleAddRecentService, handleGetRecentService, handleDeleteRecentService, handleDeleteLikeService }
+    handleAddAlbumService, handleAddRecentService, handleGetRecentService, handleDeleteRecentService, handleDeleteLikeService, handleCreatePlaylistService, handleGetPlaylistService,
+    handleGetPlaylistByIdService, handleUpdatePlaylistByIdService }
