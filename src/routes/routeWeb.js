@@ -36,6 +36,7 @@ let initWebRoutes = app => {
     router.get('/api/get-playlist', userController.handleGetPlaylist)
     router.get('/api/get-playlist-by-id', userController.handleGetPlaylistById)
     router.put('/api/update-playlist-by-id', userController.handleUpdatePlaylistById)
+    router.delete('/api/delete-song-from-playlist', userController.handleDeleteSongPlaylist)
 
     
     return app.use("/", router)

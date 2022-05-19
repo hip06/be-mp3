@@ -271,6 +271,24 @@ let handleUpdatePlaylistById =async (req, res) => {
         })
     }
 }
+let handleDeleteSongPlaylist = async (req, res) => {
+    try {
+        if (_.isEmpty(req.query) || !req.query.idUser || !req.query.idPlaylist) {
+            return res.status(200).json({
+                err: 1,
+                msg: "error from controller" + " missing payload"
+            })
+        } else {
+            let response = await userServices.handleDeleteSongPlaylistService(req.query)
+            return res.status(200).json(response)
+        }
+    } catch (error) {
+        return res.status(200).json({
+            err: -1,
+            msg: "error from controller" + error
+        })
+    }
+}
 
 module.exports ={ handleSignUp, handleLogin, handleGetUser, handleUpdateUser, handAddSinger, handleGetPersonal, handleAddAlbum, handleAddRecent, handleGetRecent,
-    handleDeleteRecent, handleDeleteLike, handleCreatePlaylist, handleGetPlaylist, handleGetPlaylistById, handleUpdatePlaylistById }
+    handleDeleteRecent, handleDeleteLike, handleCreatePlaylist, handleGetPlaylist, handleGetPlaylistById, handleUpdatePlaylistById, handleDeleteSongPlaylist }

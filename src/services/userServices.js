@@ -368,7 +368,24 @@ let handleUpdatePlaylistByIdService = async (body) => {
         }
     })
 }
+let handleDeleteSongPlaylistService =(query) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!query.idUser){
+                resolve({err: 4, msg: 'Lỗi client: không thấy id user'})
+            }else{
+                await db.Playlist.destroy({
+                   where: { idUser: query.idUser, idPlaylist: query.idPlaylist, idSong: query.idSong}
+               })
+               resolve({err: 0, msg: 'OK' })
+            }
+                  
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
 
 module.exports = { handleSignUpService, handleLoginService, handleGetUserService, handleUpdateUserService, handAddSingerService, handleGetPersonalService,
     handleAddAlbumService, handleAddRecentService, handleGetRecentService, handleDeleteRecentService, handleDeleteLikeService, handleCreatePlaylistService, handleGetPlaylistService,
-    handleGetPlaylistByIdService, handleUpdatePlaylistByIdService }
+    handleGetPlaylistByIdService, handleUpdatePlaylistByIdService, handleDeleteSongPlaylistService }
