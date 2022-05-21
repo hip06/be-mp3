@@ -289,6 +289,79 @@ let handleDeleteSongPlaylist = async (req, res) => {
         })
     }
 }
+let handleAddSong = async (req, res) => {
+    try {
+        if (_.isEmpty(req.body) || !req.body.idUser || !req.body.idSong) {
+            return res.status(200).json({
+                err: 1,
+                msg: "error from controller" + " missing payload"
+            })
+        } else {
+            let response = await userServices.handleAddSongService(req.body)
+            return res.status(200).json(response)
+        }
+    } catch (error) {
+        return res.status(200).json({
+            err: -1,
+            msg: "error from controller" + error
+        })
+    }
+}
+let handleGetSong = async (req, res) => {
+    try {
+        if (_.isEmpty(req.query) || !req.query.idUser || !req.query.idSong) {
+            return res.status(200).json({
+                err: 1,
+                msg: "error from controller" + " missing payload"
+            })
+        } else {
+            let response = await userServices.handleGetSongService(req.query)
+            return res.status(200).json(response)
+        }
+    } catch (error) {
+        return res.status(200).json({
+            err: -1,
+            msg: "error from controller" + error
+        })
+    }
+}
+let handleDeleteSong =  async (req, res) => {
+    try {
+        if (_.isEmpty(req.query) || !req.query.idUser || !req.query.idSong) {
+            return res.status(200).json({
+                err: 1,
+                msg: "error from controller" + " missing payload"
+            })
+        } else {
+            let response = await userServices.handleDeleteSongService(req.query)
+            return res.status(200).json(response)
+        }
+    } catch (error) {
+        return res.status(200).json({
+            err: -1,
+            msg: "error from controller" + error
+        })
+    }
+}
+let handleUpdatePassword =async ( req, res) => {
+    try {
+        if (_.isEmpty(req.body) || !req.body.email) {
+            return res.status(200).json({
+                err: 1,
+                msg: "error from controller" + " missing payload"
+            })
+        } else {
+            let response = await userServices.handleUpdatePasswordService(req.body)
+            return res.status(200).json(response)
+        }
+    } catch (error) {
+        return res.status(200).json({
+            err: -1,
+            msg: "error from controller" + error
+        })
+    }
+}
 
 module.exports ={ handleSignUp, handleLogin, handleGetUser, handleUpdateUser, handAddSinger, handleGetPersonal, handleAddAlbum, handleAddRecent, handleGetRecent,
-    handleDeleteRecent, handleDeleteLike, handleCreatePlaylist, handleGetPlaylist, handleGetPlaylistById, handleUpdatePlaylistById, handleDeleteSongPlaylist }
+    handleDeleteRecent, handleDeleteLike, handleCreatePlaylist, handleGetPlaylist, handleGetPlaylistById, handleUpdatePlaylistById, handleDeleteSongPlaylist, handleAddSong,
+    handleGetSong, handleDeleteSong, handleUpdatePassword }

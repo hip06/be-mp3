@@ -385,7 +385,74 @@ let handleDeleteSongPlaylistService =(query) => {
         }
     })
 }
-
+let handleAddSongService = (body) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+           let response = await db.Song.findOrCreate({
+                where: { idUser: body.idUser, idSong: body.idSong},
+                defaults: {
+                    idUser: body.idUser, 
+                    idSong: body.idSong
+                }
+            })
+            resolve({err: 0, msg: 'OK', response })
+                  
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+let handleGetSongService = (query) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response
+           if (query.type === 'all'){
+            response = await db.Song.findAll({
+                where: { idUser: query.idUser},
+                raw: true
+            })
+           }else{
+            response = await db.Song.findOne({
+                where: { idUser: query.idUser, idSong: query.idSong},
+                raw: true
+            })
+           }
+            response ? resolve({err: 0, msg: 'OK', response }) : resolve({err: 6, msg: 'Not found' })
+                  
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+let handleDeleteSongService = (query) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.Song.destroy({
+                where: { idUser: query.idUser, idSong: query.idSong},
+            })
+           resolve({err: 0, msg: 'OK' }) 
+                  
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+let handleUpdatePasswordService = (body) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.User.update({
+                password: handleHashPassword(body.password)
+            },{
+                where: { email: body.email},
+            })
+           resolve({err: 0, msg: 'OK' }) 
+                  
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
 module.exports = { handleSignUpService, handleLoginService, handleGetUserService, handleUpdateUserService, handAddSingerService, handleGetPersonalService,
     handleAddAlbumService, handleAddRecentService, handleGetRecentService, handleDeleteRecentService, handleDeleteLikeService, handleCreatePlaylistService, handleGetPlaylistService,
-    handleGetPlaylistByIdService, handleUpdatePlaylistByIdService, handleDeleteSongPlaylistService }
+    handleGetPlaylistByIdService, handleUpdatePlaylistByIdService, handleDeleteSongPlaylistService, handleAddSongService, handleGetSongService ,handleDeleteSongService,
+handleUpdatePasswordService }
